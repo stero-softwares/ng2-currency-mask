@@ -1,5 +1,5 @@
 export class InputManager {
-    private _storedRawValue: string;
+    private _storedRawValue: any;
 
     constructor(private htmlInputElement: any) {}
 
@@ -16,7 +16,7 @@ export class InputManager {
         }
     }
 
-    updateValueAndCursor(newRawValue: string, oldLength: number, selectionStart: number): void {
+    updateValueAndCursor(newRawValue: any, oldLength: number, selectionStart: number): void {
         this.rawValue = newRawValue;
         let newLength = newRawValue.length;
         selectionStart = selectionStart - (oldLength - newLength);
@@ -41,7 +41,7 @@ export class InputManager {
             selectionStart = this.htmlInputElement.selectionStart;
             selectionEnd = this.htmlInputElement.selectionEnd;
         } else {
-            let range = document.getSelection().anchorNode;
+            let range = document.getSelection()?.anchorNode;
 
             if (range && range.firstChild == this.htmlInputElement) {
                 let lenght = this.htmlInputElement.value.length;
@@ -72,11 +72,11 @@ export class InputManager {
         };
     }
 
-    get rawValue(): string {
+    get rawValue(): any {
         return this.htmlInputElement && this.htmlInputElement.value;
     }
 
-    set rawValue(value: string) {
+    set rawValue(value: any) {
         this._storedRawValue = value;
 
         if (this.htmlInputElement) {
@@ -84,7 +84,7 @@ export class InputManager {
         }
     }
 
-    get storedRawValue(): string {
+    get storedRawValue(): any {
         return this._storedRawValue;
     }
 }

@@ -2,8 +2,8 @@ import { InputService } from "./input.service";
 
 export class InputHandler {
     private inputService: InputService;
-    private onModelChange: Function;
-    private onModelTouched: Function;
+    private onModelChange: any;
+    private onModelTouched: any;
     private htmlInputElement: HTMLInputElement;
 
     constructor(htmlInputElement: HTMLInputElement, options: any) {
@@ -170,11 +170,11 @@ export class InputHandler {
         this.onModelTouched = callbackFunction;
     }
 
-    setValue(value: number): void {
+    setValue(value: any): void {
         this.inputService.value = value;
     }
 
-    private getNewKeyCode(oldString: string, newString: string): number {
+    private getNewKeyCode(oldString: any, newString: any): any {
         if (oldString.length > newString.length) {
             return null;
         }

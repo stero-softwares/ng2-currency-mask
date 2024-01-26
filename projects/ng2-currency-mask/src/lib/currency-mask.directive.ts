@@ -27,21 +27,19 @@ export const CURRENCYMASKDIRECTIVE_VALUE_ACCESSOR: any = {
     providers: [CURRENCYMASKDIRECTIVE_VALUE_ACCESSOR, { provide: NG_VALIDATORS, useExisting: CurrencyMaskDirective, multi: true }],
 })
 export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccessor, DoCheck, OnInit, Validator {
-    @Input() max: number;
-    @Input() min: number;
     @Input() options: any = {};
 
-    inputHandler: InputHandler;
+    inputHandler: InputHandler | null = null;
     keyValueDiffer: KeyValueDiffer<any, any>;
 
     optionsTemplate = {
-        align: "right",
+        align: "left",
         allowNegative: true,
-        decimal: ".",
+        decimal: ",",
         precision: 2,
-        prefix: "$ ",
+        prefix: "R$ ",
         suffix: "",
-        thousands: ",",
+        thousands: ".",
     };
 
     constructor(
@@ -63,7 +61,7 @@ export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccesso
     ngDoCheck() {
         if (this.keyValueDiffer.diff(this.options)) {
             this.elementRef.nativeElement.style.textAlign = this.options.align ? this.options.align : this.optionsTemplate.align;
-            this.inputHandler.updateOptions((<any>Object).assign({}, this.optionsTemplate, this.options));
+            this.inputHandler?.updateOptions((<any>Object).assign({}, this.optionsTemplate, this.options));
         }
     }
 
@@ -73,53 +71,53 @@ export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccesso
 
     @HostListener("blur", ["$event"])
     handleBlur(event: any) {
-        this.inputHandler.getOnModelTouched().apply(event);
+        this.inputHandler?.getOnModelTouched().apply(event);
     }
 
     @HostListener("click", ["$event"])
     handleClick(event: any) {
-        this.inputHandler.handleClick(event, this.isChromeAndroid());
+        this.inputHandler?.handleClick(event, this.isChromeAndroid());
     }
 
     @HostListener("cut", ["$event"])
     handleCut(event: any) {
         if (!this.isChromeAndroid()) {
-            this.inputHandler.handleCut(event);
+            this.inputHandler?.handleCut(event);
         }
     }
 
     @HostListener("input", ["$event"])
     handleInput(event: any) {
         if (this.isChromeAndroid()) {
-            this.inputHandler.handleInput(event);
+            this.inputHandler?.handleInput(event);
         }
     }
 
     @HostListener("keydown", ["$event"])
     handleKeydown(event: any) {
         if (!this.isChromeAndroid()) {
-            this.inputHandler.handleKeydown(event);
+            this.inputHandler?.handleKeydown(event);
         }
     }
 
     @HostListener("keypress", ["$event"])
     handleKeypress(event: any) {
         if (!this.isChromeAndroid()) {
-            this.inputHandler.handleKeypress(event);
+            this.inputHandler?.handleKeypress(event);
         }
     }
 
     @HostListener("keyup", ["$event"])
     handleKeyup(event: any) {
         if (!this.isChromeAndroid()) {
-            this.inputHandler.handleKeyup(event);
+            this.inputHandler?.handleKeyup(event);
         }
     }
 
     @HostListener("paste", ["$event"])
     handlePaste(event: any) {
         if (!this.isChromeAndroid()) {
-            this.inputHandler.handlePaste(event);
+            this.inputHandler?.handlePaste(event);
         }
     }
 
@@ -128,32 +126,33 @@ export class CurrencyMaskDirective implements AfterViewInit, ControlValueAccesso
     }
 
     registerOnChange(callbackFunction: Function): void {
-        this.inputHandler.setOnModelChange(callbackFunction);
+        this.inputHandler?.setOnModelChange(callbackFunction);
     }
 
     registerOnTouched(callbackFunction: Function): void {
-        this.inputHandler.setOnModelTouched(callbackFunction);
+        this.inputHandler?.setOnModelTouched(callbackFunction);
     }
 
     setDisabledState(value: boolean): void {
         this.elementRef.nativeElement.disabled = value;
     }
 
-    validate(abstractControl: AbstractControl): { [key: string]: any } {
-        let result: any = {};
+    validate(abstractControl: AbstractControl): { [key: string]: any } | null {
+        // let result: any = {};
 
-        if (abstractControl.value > this.max) {
-            result.max = true;
-        }
+        // if (abstractControl.value > this.max) {
+        //     result.max = true;
+        // }
 
-        if (abstractControl.value < this.min) {
-            result.min = true;
-        }
+        // if (abstractControl.value < this.min) {
+        //     result.min = true;
+        // }
 
-        return result != {} ? result : null;
+        // return result != {} ? result : null;
+        return null
     }
 
     writeValue(value: number): void {
-        this.inputHandler.setValue(value);
+        this.inputHandler?.setValue(value);
     }
 }

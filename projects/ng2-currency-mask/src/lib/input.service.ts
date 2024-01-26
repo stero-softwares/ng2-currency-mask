@@ -7,12 +7,12 @@ export class InputService {
         this.inputManager = new InputManager(htmlInputElement);
     }
 
-    addNumber(keyCode: number): void {
+    addNumber(keyCode: any | null): void {
         if (!this.rawValue) {
             this.rawValue = this.applyMask(false, "0");
         }
 
-        let keyChar = String.fromCharCode(keyCode);
+        let keyChar = String.fromCharCode(keyCode!);
         let selectionStart = this.inputSelection.selectionStart;
         let selectionEnd = this.inputSelection.selectionEnd;
         this.rawValue = this.rawValue.substring(0, selectionStart) + keyChar + this.rawValue.substring(selectionEnd, this.rawValue.length);
@@ -50,7 +50,7 @@ export class InputService {
         return operator + prefix + newRawValue + suffix;
     }
 
-    clearMask(rawValue: string): number | null {
+    clearMask(rawValue: any): any | null {
         if (rawValue == null || rawValue == "") {
             return null;
         }
@@ -94,15 +94,15 @@ export class InputService {
         }
     }
 
-    getRawValueWithoutSuffixEndPosition(): number {
+    getRawValueWithoutSuffixEndPosition(): any {
         return this.rawValue.length - this.options.suffix.length;
     }
 
-    getRawValueWithoutPrefixStartPosition(): number {
+    getRawValueWithoutPrefixStartPosition(): any {
         return this.value != null && this.value < 0 ? this.options.prefix.length + 1 : this.options.prefix.length;
     }
 
-    removeNumber(keyCode: number): void {
+    removeNumber(keyCode: any): void {
         let { decimal, thousands } = this.options;
         let selectionEnd = this.inputSelection.selectionEnd;
         let selectionStart = this.inputSelection.selectionStart;
@@ -143,18 +143,18 @@ export class InputService {
             }
         }
 
-        this.rawValue = this.rawValue.substring(0, selectionStart) + this.rawValue.substring(selectionEnd, this.rawValue.length);
+        this.rawValue = this.rawValue?.substring(0, selectionStart) + this.rawValue?.substring(selectionEnd, this.rawValue?.length);
         this.updateFieldValue(selectionStart);
     }
 
-    updateFieldValue(selectionStart?: number): void {
+    updateFieldValue(selectionStart?: any): void {
         let newRawValue = this.applyMask(false, this.rawValue || "");
-        selectionStart = selectionStart == undefined ? this.rawValue.length : selectionStart;
-        this.inputManager.updateValueAndCursor(newRawValue, this.rawValue.length, selectionStart);
+        selectionStart = selectionStart == undefined ? this.rawValue?.length : selectionStart;
+        this.inputManager.updateValueAndCursor(newRawValue, this.rawValue?.length, selectionStart);
     }
 
     updateOptions(options: any): void {
-        let value: number = this.value;
+        let value: any | null = this.value;
         this.options = options;
         this.value = value;
     }
@@ -167,23 +167,23 @@ export class InputService {
         return this.inputManager.inputSelection;
     }
 
-    get rawValue(): string {
+    get rawValue(): any {
         return this.inputManager.rawValue;
     }
 
-    set rawValue(value: string) {
+    set rawValue(value: any) {
         this.inputManager.rawValue = value;
     }
 
-    get storedRawValue(): string {
+    get storedRawValue(): any{
         return this.inputManager.storedRawValue;
     }
 
-    get value(): number | null {
+    get value(): any | null {
         return this.clearMask(this.rawValue);
     }
 
-    set value(value: number) {
+    set value(value: any | null) {
         this.rawValue = this.applyMask(true, "" + value);
     }
 }
